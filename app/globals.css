@@ -25,3 +25,7 @@
     @apply max-w-full h-auto block;
   }
 }
+
+button {
+  @apply cursor-pointer;
+}

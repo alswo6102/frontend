@@ -72,7 +72,7 @@ export default function LoginForm() {
                         <option value="여자">여자</option>
                     </select>
                 </div>
-                <button type="submit" className="text-2xl bg-orange-600 border border-gray-300 rounded-full px-5 py-2 mt-7 font-[MeetMe] text-white hover:bg-orange-700">시작하기</button>
+                <button type="submit" className="text-2xl border border-gray-300 rounded-full px-5 py-2 mt-7 font-[MeetMe] text-white hover:brightness-95" style={{ backgroundColor: '#FF6F00' }}>시작하기</button>
             </form>
         </div>
     )

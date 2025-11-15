@@ -1,74 +1,90 @@
 'use client';
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { joinUser } from "@/lib/api";
+import { useEffect, useState } from 'react';
+import { getQuestions } from '@/lib/api';
+import { Question } from '@/lib/types';
+import ProgressRate from '@/components/ProgressRate';
+import QuestionNav from '@/components/QuestionNav';
+import Answer from '@/components/Answer';
 
 export default function QuestionsPage() {
-	const router = useRouter();
-	const [answers, setAnswers] = useState<Record<string, string>>({});
-	const [error, setError] = useState<string | null>(null);
-	const [loading, setLoading] = useState(false);
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-	function handleChange(q: string, value: string) {
-		setAnswers(prev => ({ ...prev, [q]: value }));
-	}
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        setLoading(true);
+        const data = await getQuestions();
+        setQuestions(data);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : '오류가 발생했습니다.'
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
 
-	async function handleSubmit(e?: React.FormEvent) {
-		e?.preventDefault();
-		setError(null);
-		setLoading(true);
+    fetchQuestions();
+  }, []);
 
-		try {
-			const signupRaw = sessionStorage.getItem('signup');
-			const userRaw = sessionStorage.getItem('user');
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-screen text-lg">로딩 중...</div>
+    );
 
-			if (signupRaw) {
-				const signup = JSON.parse(signupRaw);
-				const payload = {
-					name: signup.name,
-					password: signup.password,
-					gender: signup.gender,
-					answers,
-				};
+  const currentQuestion = questions[currentIndex];
 
-				const res = await joinUser(payload);
-				sessionStorage.setItem('user', JSON.stringify({ memberId: res.id ?? res.memberId ?? null, name: res.name, role: res.role }));
-				sessionStorage.removeItem('signup');
-				router.push('/result');
-				return;
-			}
+  const handleAnswer = (value: string) => {
+    setAnswers((prev) => ({
+      ...prev,
+      [currentQuestion.questionId]: value,
+    }));
+  };
 
-			if (userRaw) {
-				router.push('/result');
-				return;
-			}
+  return (
+    <div className="flex flex-col w-full items-center bg-white">
+      <div className="w-full max-w-[375px] flex flex-col justify-between" style={{ height: 'calc(100vh - var(--header-height))' }}>
 
-			router.push('/login');
-		} catch (err: any) {
-			setError(err?.message ?? '제출 중 오류가 발생했습니다.');
-		} finally {
-			setLoading(false);
-		}
-	}
+        {/* 진행률 바 */}
+        <ProgressRate current={currentIndex + 1} total={questions.length} />
 
-	return (
-		<div className="w-full p-6 flex flex-col items-center gap-6 max-w-[375px] mx-auto">
-			<h1 className="text-3xl font-bold">질문 페이지</h1>
-			<form onSubmit={handleSubmit} className="flex flex-col gap-3 w-full">
-				<div className="mb-3">
-					<label className="mr-2 font-[Pretendard]">성별</label>
-					<select onChange={e => handleChange('gender', e.target.value)} className="h-[35px] border border-gray-300 rounded-full px-3 font-[Pretendard]">
-						<option value="">선택</option>
-						<option value="남자">남자</option>
-						<option value="여자">여자</option>
-					</select>
-				</div>
-				{error && <p className="text-red-500 text-sm">{error}</p>}
-				<button type="submit" disabled={loading} className="px-6 py-3 border-none rounded-lg bg-orange-600 text-white text-base cursor-pointer font-[Pretendard] disabled:opacity-60 disabled:cursor-not-allowed hover:bg-orange-700">
-					{loading ? '제출중...' : '제출'}
-				</button>
-			</form>
+        {/* laptop 이미지와 질문 텍스트 */}
+        <div className="relative flex justify-center">
+	      <img
+		    src="/images/laptop.png"
+		    alt="Laptop"
+		    className="w-[320px]"
+		  />
+		  <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-4 text-center">
+		    <h2 className="text-xl font-[MeetMe] text-black">
+		  	  {currentQuestion.content}
+		    </h2>
+		  </div>
 		</div>
-	);
+
+		{/* 답변 UI */}
+		<div className="px-5 py-2">
+		  <Answer
+		  question={currentQuestion}
+		    answer={answers[currentQuestion.questionId]}
+		    onAnswer={handleAnswer}
+		  />
+		</div>
+
+        {/* 네비게이션 */}
+        <QuestionNav
+          currentIndex={currentIndex}
+          total={questions.length}
+          onPrevious={() => setCurrentIndex((i) => i - 1)}
+          onNext={() => setCurrentIndex((i) => i + 1)}
+          onSubmit={() => console.log('제출', answers)}
+        />
+      </div>
+    </div>
+  );
 }

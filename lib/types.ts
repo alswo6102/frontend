@@ -14,3 +14,10 @@ export interface UserInfo {
     name: string;
     role: 'BABY' | 'ADULT';
 }
+
+export interface Question {
+    questionId: number;
+    content: string;
+    type?: 'metric' | 'text' | 'choice';
+    choices?: string[];
+}

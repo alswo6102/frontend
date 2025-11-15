@@ -1,6 +1,6 @@
 const API_BASE_URL = 'http://43.200.59.45:8080';
 
-import { LoginRequest, LoginResponse, UserInfo } from "./types";
+import { LoginRequest, LoginResponse, UserInfo, Question } from "./types";
 
 async function parseResponse(res: Response) {
     const text = await res.text();
@@ -59,4 +59,21 @@ export async function getUserInfo(id: number): Promise<UserInfo> {
     }
 
     return parsed as UserInfo;
+}
+
+export async function getQuestions(): Promise<Question[]> {
+    const response = await fetch(`${API_BASE_URL}/question`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+    });
+
+    const parsed = await parseResponse(response);
+    if (!response.ok) {
+        const err: any = new Error(parsed?.message ?? response.statusText ?? '질문을 불러오는데 실패했습니다.');
+        err.status = response.status;
+        err.response = parsed;
+        throw err;
+    }
+
+    return parsed as Question[];
 }
