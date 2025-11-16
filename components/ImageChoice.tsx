@@ -1,5 +1,14 @@
 /**
- * Q5, Q7 전용 : 이미지 2개 중 1개 선택
+ * ImageChoice
+ * - Q5, Q7 전용 이미지 선택형 질문 컴포넌트
+ * - 2개의 이미지 중 1개 선택
+ * - 선택 시 이미지가 filled로 바뀌고 클릭 시 active 효과 적용
+ * 
+ * Props:
+ * - questionId: 질문 번호 (이미지 경로용)
+ * - choices: 선택지 이름 배열
+ * - selected: 현재 선택된 값
+ * - onSelect: 선택 시 콜백
  */
 
 interface Props {

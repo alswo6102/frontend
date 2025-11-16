@@ -1,5 +1,11 @@
 /**
- * 주관식 답변 : Q4, Q6
+ * TextAnswer
+ * - 주관식 입력 컴포넌트 (Q4, Q6)
+ * - value 변경 시 onChange 호출
+ * 
+ * Props:
+ * - value: 현재 입력 값
+ * - onChange: 값 변경 시 호출
  */
 
 interface Props {

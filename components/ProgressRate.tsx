@@ -1,3 +1,13 @@
+/**
+ * ProgressRate
+ * - 질문 진행률 표시 컴포넌트
+ * - 상단 바 형태, 퍼센트에 따라 너비 변동
+ * 
+ * Props:
+ * - current: 현재 질문 번호
+ * - total: 전체 질문 개수
+ */
+
 interface ProgressRateProps {
   current: number;
   total: number;

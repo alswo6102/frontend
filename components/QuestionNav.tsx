@@ -1,3 +1,16 @@
+/**
+ * QuestionNav
+ * - 이전/다음/제출 버튼을 포함한 질문 네비게이션
+ * - 마지막 질문 시 '다음' 버튼을 '제출' 버튼으로 변경
+ * 
+ * Props:
+ * - currentIndex: 현재 질문 인덱스
+ * - total: 전체 질문 개수
+ * - onPrevious: 이전 버튼 클릭 시
+ * - onNext: 다음 버튼 클릭 시
+ * - onSubmit: 제출 버튼 클릭 시
+ */
+
 interface QuestionNavProps {
   currentIndex: number;
   total: number;
@@ -19,7 +32,6 @@ export default function QuestionNav({
     <div className="w-full bg-white px-4 pb-4">
       <div className="w-full max-w-[375px] mx-auto">
 
-        {/* 이전 / 다음/제출 버튼 */}
         <div className="flex gap-3 justify-center">
           <button
             onClick={onPrevious}

@@ -1,3 +1,11 @@
+/**
+ * LoginForm
+ * - 로그인 입력 폼 컴포넌트
+ * - 이름, 4자리 비밀번호, 성별 선택
+ * - 로그인 API 호출 후 role에 따라 페이지 이동
+ * - 403 에러 시 미가입 처리 후 /questions 이동
+ */
+
 'use client';
 
 import { loginUser } from "@/lib/api";
@@ -11,6 +19,7 @@ export default function LoginForm() {
     const router = useRouter();
     const [gender, setGender] = useState<string>('남자');
 
+    // 폼 제출 성공
     const onSubmit = async (data: LoginRequest) => {
         try {
             const loginRes = await loginUser(data);
@@ -19,6 +28,8 @@ export default function LoginForm() {
                 name: loginRes.name,
                 role: loginRes.role,
             }));
+
+            // role에 따라 페이지 이동
             if (loginRes.role === 'ADULT') {
                 router.push('/adult');
             } else {
@@ -26,6 +37,7 @@ export default function LoginForm() {
             }
         } catch (error: any) {
             const status = error?.status ?? error?.response?.status ?? (typeof error === 'string' && error.includes('403') ? 403 : undefined);
+            // 403: 미가입 상태 (새로운 유저)
             if (status === 403) {
                 sessionStorage.setItem('signup', JSON.stringify({
                     name: data.name,
@@ -40,6 +52,7 @@ export default function LoginForm() {
         };
     };
 
+    // 폼 유효성 실패 시
     const onInvalid = (errors: any) => {
         if (errors.name?.message) {
             alert(errors.name.message);

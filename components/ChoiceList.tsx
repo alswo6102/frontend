@@ -1,5 +1,13 @@
 /**
- * 선택형 답변 : Q3, Q5, Q7, Q8, Q9
+ * ChoiceList
+ * - 일반 선택형 질문 컴포넌트
+ * - 여러 개 선택이 아닌 단일 선택
+ * - 선택된 버튼은 색상 변화
+ * 
+ * Props:
+ * - choices: 선택지 배열
+ * - selected: 현재 선택된 값
+ * - onSelect: 선택 시 콜백
  */
 
 interface Props {

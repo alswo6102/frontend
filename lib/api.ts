@@ -1,79 +1,55 @@
+/**
+ * API 함수 모음
+ * - loginUser: 로그인
+ * - joinUser: 회원가입/질문 제출
+ * - getUserInfo: 유저 정보 조회
+ * - getQuestions: 질문 리스트 조회
+ * 
+ * fetchJSON으로 공통 fetch 처리
+ */
+
+import { LoginRequest, Question } from "./types";
+
 const API_BASE_URL = 'https://cauhackathon-team2.p-e.kr';
 
-import { LoginRequest, LoginResponse, UserInfo, Question } from "./types";
+async function fetchJSON(url: string, options?: RequestInit) {
+  const res = await fetch(url, options);
+  const text = await res.text();
+  let data: any = null;
 
-async function parseResponse(res: Response) {
-    const text = await res.text();
-    try {
-        return text ? JSON.parse(text) : null;
-    } catch {
-        return text;
-    }
+  try { data = text ? JSON.parse(text) : null; } 
+  catch { data = text; }
+
+  if (!res.ok) {
+    const err: any = new Error(data?.message ?? res.statusText ?? 'API 호출 실패');
+    err.status = res.status;
+    err.response = data;
+    throw err;
+  }
+
+  return data;
 }
 
-export async function loginUser(data: LoginRequest): Promise<LoginResponse> {
-    const response = await fetch(`${API_BASE_URL}/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-    });
-
-    const parsed = await parseResponse(response);
-
-    if (!response.ok) {
-        const err: any = new Error(parsed?.message ?? response.statusText ?? '로그인에 실패했습니다.');
-        err.status = response.status;
-        err.response = parsed;
-        throw err;
-    }
-
-    return parsed as LoginResponse;
+export async function loginUser(data: LoginRequest) {
+  return fetchJSON(`${API_BASE_URL}/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
 }
 
 export async function joinUser(body: { name: string; password: string; gender?: string; answers: Record<string, string>; }) {
-    const response = await fetch(`${API_BASE_URL}/join`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-    });
-
-    const parsed = await parseResponse(response);
-    if (!response.ok) {
-        const err: any = new Error(parsed?.message ?? response.statusText ?? '회원가입에 실패했습니다.');
-        err.status = response.status;
-        err.response = parsed;
-        throw err;
-    }
-
-    return parsed;
+  return fetchJSON(`${API_BASE_URL}/join`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
 }
 
-export async function getUserInfo(id: number): Promise<UserInfo> {
-    const response = await fetch(`${API_BASE_URL}/my/${id}`);
-    const parsed = await parseResponse(response);
-    if (!response.ok) {
-        const err: any = new Error(parsed?.message ?? response.statusText ?? '사용자 정보를 불러오는데 실패했습니다.');
-        err.status = response.status;
-        err.response = parsed;
-        throw err;
-    }
-
-    return parsed as UserInfo;
+export async function getUserInfo(id: number) {
+  return fetchJSON(`${API_BASE_URL}/my/${id}`);
 }
 
 export async function getQuestions(): Promise<Question[]> {
-    const response = await fetch(`${API_BASE_URL}/question`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-    });
-
-    const parsed = await parseResponse(response);
-    if (!response.ok) {
-        const err: any = new Error(parsed?.message ?? response.statusText ?? '질문을 불러오는데 실패했습니다.');
-        err.status = response.status;
-        err.response = parsed;
-        throw err;
-    }
-
-    return parsed as Question[];
+  return fetchJSON(`${API_BASE_URL}/question`);
 }
