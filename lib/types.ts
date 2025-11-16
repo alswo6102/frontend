@@ -18,6 +18,6 @@ export interface UserInfo {
 export interface Question {
     questionId: number;
     content: string;
-    type?: 'metric' | 'text' | 'choice';
+    type?: 'metric' | 'text' | 'choice' | 'mbti';
     choices?: string[];
 }

@@ -9,7 +9,7 @@
  * - onSelect: 모든 선택 완료 시 호출되는 콜백
  */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Props {
   selected?: string; // ex: "ENFP"
@@ -38,6 +38,21 @@ export default function MBTIChoice({ selected, onSelect }: Props) {
     PJ: null,
   });
 
+  // selected 값이 존재할 경우 → state 복원 (뒤로가기 대비)
+  useEffect(() => {
+    if (!selected) return;
+
+    const chars = selected.split(""); // ['E'], ['E','N'], ['E','N','F'], ['E','N','F','P']
+
+    setState({
+      EI: chars[0] ?? null,
+      NS: chars[1] ?? null,
+      FT: chars[2] ?? null,
+      PJ: chars[3] ?? null,
+    });
+  }, [selected]);
+
+
   // 특정 그룹 선택 시 상태 업데이트
   const handleSelect = (groupIndex: number, value: string) => {
     const keys = ["EI", "NS", "FT", "PJ"] as const;
@@ -50,7 +65,7 @@ export default function MBTIChoice({ selected, onSelect }: Props) {
 
     setState(newState);
 
-    // 네 자리 모두 선택되면 문자열로 만들어 전달
+    // 4자리 모두 선택되었을 때만 상위로 전달
     if (Object.values(newState).every((v) => v !== null)) {
       const result = Object.values(newState).join("");
       onSelect(result);
@@ -72,7 +87,7 @@ export default function MBTIChoice({ selected, onSelect }: Props) {
                 <button
                   key={item}
                   onClick={() => handleSelect(index, item)}
-                  className={`flex-1 p-4 rounded-lg border-2 font-[MeetMe] text-xl transition
+                  className={`flex-1 rounded-lg border-2 font-[MeetMe] text-2xl transition
                     ${
                       isSelected
                         ? "border-blue-500 bg-blue-50"

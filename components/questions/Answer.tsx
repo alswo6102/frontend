@@ -26,7 +26,12 @@ export default function Answer({ question, answer, onAnswer }: AnswerProps) {
 
   // Q3: MBTI 선택
   if (question.questionId === 3) {
-    return <MBTIChoice selected={answer as string} onSelect={onAnswer as (v: string) => void} />;
+    return (
+      <MBTIChoice
+        selected={answer as string}
+        onSelect={onAnswer as (v: string) => void}
+      />
+    );
   }
 
   // Q5, Q7: 이미지 2개 중 1개 선택

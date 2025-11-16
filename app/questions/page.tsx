@@ -15,12 +15,14 @@ import { Question } from '@/lib/types';
 import ProgressRate from '@/components/questions/ProgressRate';
 import QuestionNav from '@/components/questions/QuestionNav';
 import Answer from '@/components/questions/Answer';
+import { useRouter } from 'next/navigation';
 
 export default function QuestionsPage() {
   const [questions, setQuestions] = useState<Question[]>([]);	// 질문 목록
   const [currentIndex, setCurrentIndex] = useState(0);	// 현재 질문 인덱스
   const [answers, setAnswers] = useState<Record<number, string | string[]>>({});	// 응답 저장
   const [loading, setLoading] = useState(true);	// 로딩 상태
+  const router = useRouter();
 
   // 페이지 로드 시 질문 데이터 불러오기 (fetch)
   useEffect(() => {
@@ -58,6 +60,8 @@ export default function QuestionsPage() {
 			return false;
 		}
 	}
+
+	return true;
   }
 
   // 응답 제출
@@ -86,6 +90,9 @@ export default function QuestionsPage() {
     try {
       const data = await joinUser(payload);
       console.log('서버 응답:', data);
+
+	  // 제출 성공시 결과 페이지로 이동
+	  router.push ('/my');
     } catch (err: any) {
       console.error(err);
       alert(err.message || '제출 중 오류가 발생했습니다.');
