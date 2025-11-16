@@ -26,11 +26,15 @@
   }
 }
 
-/* 전체 폰트를 MeetMe로 통일 */
+/* 전체 폰트 => MeetMe */
 html, body, * {
-  font-family: "MeetMe", sans-serif !important;
+  @apply font-[MeetMe]
 }
 
 button {
   @apply cursor-pointer;
+}
+
+input, textarea, select, option {
+  @apply font-[Pretendard];
 }

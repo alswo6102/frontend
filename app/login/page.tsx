@@ -12,9 +12,9 @@ import LoginForm from "@/components/login/LoginForm";
 export default function LoginPage() {
     return (
         <div className="flex flex-col items-center justify-center w-full">
-            <div className="flex flex-col items-center gap-9 w-full max-w-[375px]">
-                <img src="/images/bubble.png" width={200} />
-                <img src="/images/main_lion.png" width={200} />
+            <div className="flex flex-col items-center gap-4 w-full max-w-[375px]">
+                <img src="/images/bubble.png" width={210} />
+                <img src="/images/main_lion.png" width={240} />
 
                 {/* 로그인 입력 폼 */}
                 <LoginForm />

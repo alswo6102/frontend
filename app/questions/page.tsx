@@ -42,7 +42,7 @@ export default function QuestionsPage() {
   }, []);
 
   // 로딩 화면
-  if (loading) return <div className="flex justify-center items-center h-screen text-lg font-[MeetMe]">로딩 중...</div>;
+  if (loading) return <div className="flex justify-center items-center h-screen text-lg">로딩 중...</div>;
 
   const currentQuestion = questions[currentIndex];	// 현재 질문
 
@@ -92,7 +92,7 @@ export default function QuestionsPage() {
       console.log('서버 응답:', data);
 
 	  // 제출 성공시 결과 페이지로 이동
-	  router.push ('/my');
+	  router.push ('/my/${data.id}');
     } catch (err: any) {
       console.error(err);
       alert(err.message || '제출 중 오류가 발생했습니다.');
@@ -110,7 +110,7 @@ export default function QuestionsPage() {
         <div className="relative flex justify-center">
           <img src="/images/laptop.png" className="w-[320px]" />
           <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4 text-center">
-            <h2 className="text-xl font-[MeetMe] text-black">{currentQuestion.content}</h2>
+            <h2 className="text-xl  text-black">{currentQuestion.content}</h2>
           </div>
         </div>
 
