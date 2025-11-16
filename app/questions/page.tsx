@@ -4,6 +4,7 @@
  * - ProgressRate(상단 진행률), 질문 내용, 답변 컴포넌트, QuestionNav(이전/다음 버튼) 포함
  * - API에서 질문 데이터를 불러오고, 답변을 상태에 저장
  * - 제출 시 answers를 가공해서 서버에 전송
+ * - 제출 버튼 클릭 시 모든 문항에 다 응답했는지 검사
  */
 
 'use client';
@@ -47,8 +48,23 @@ export default function QuestionsPage() {
     setAnswers(prev => ({ ...prev, [currentQuestion.questionId]: value }));
   };
 
+  // 모든 문항 답변 완료? 검증
+  const allAnswered = () => {
+	for (const q of questions) {
+		const ans = answers[q.questionId];
+
+		if (!ans || (Array.isArray(ans) && ans.length === 0)) {
+			alert(`모든 문항에 답변해주세요!`);
+			return false;
+		}
+	}
+  }
+
   // 응답 제출
   const submitToServer = async () => {
+	// 유효성 검사
+	if (!allAnswered()) return;
+
 	// 회원 가입 시 저장한 정보 불러오기
     const signup = JSON.parse(sessionStorage.getItem('signup') || '{}');
 

@@ -37,7 +37,7 @@ export default function ImageScale({ question, selected = [], onSelect }: Props)
     <div className="flex flex-col">
       <div className="flex justify-center mb-2">
         <p className="font-[MeetMe] text-lg" style={{ color: "#FF6F00" }}>
-          ※ 해당하는 만큼 눌러주세요! ※
+          ※ 해당하는 만큼 눌러주세요! (1개 이상) ※
         </p>
       </div>
 
