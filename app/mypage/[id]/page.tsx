@@ -2,24 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { API_BASE_URL, getUserInfo } from '@/lib/api';
-
-interface UserResult {
-  id: number;
-  name: string;
-  role: string;
-  answer: string;
-  image: string;
-  description: string;
-  teamBuilt: boolean;
-  teamId?: number;          // 팀 ID 추가
-}
+import { getTeamInfo, getUserInfo } from '@/lib/api';
+import { MyPageUser } from '@/lib/types'; 
+import Loading from '@/components/common/Loading';
 
 export default function MyPage() {
   const params = useParams();
   const router = useRouter();
   const { id } = params;
-  const [user, setUser] = useState<UserResult | null>(null);
+  const [user, setUser] = useState<MyPageUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,7 +19,7 @@ export default function MyPage() {
     const fetchUser = async () => {
       try {
         setLoading(true);
-        const data = await getUserInfo(Number(id));
+        const data = await getUserInfo(Number(id)); 
         setUser(data);
       } catch (err) {
         console.error(err);
@@ -43,38 +34,27 @@ export default function MyPage() {
   }, [id, router]);
 
   if (loading)
-    return (
-      <div className="flex justify-center items-center h-screen text-lg">
-        로딩 중...
-      </div>
-    );
+    return <Loading />
 
   if (!user) return null;
 
   // 클릭 핸들러
   const handleGoTeam = async () => {
-    if (!user?.teamBuilt) return;
+    if (!user.teamBuilt) return;
 
-    try {
-      const res = await fetch(`${API_BASE_URL}/team`);
-      const data = await res.json();
+    const teamData = await getTeamInfo();
+    const teamIndex = teamData.teams.findIndex((team: any) =>
+      team.members.some((m: any) => m.name === user.name)
+    );
 
-      const teamIndex = data.teams.findIndex((team: any) =>
-        team.members.some((m: any) => m.name === user.name)
-      );
-
-      if (teamIndex === -1) {
-        alert("아직 팀이 배정되지 않았습니다.");
-        return;
-      }
-
-      router.push(`/team/${teamIndex + 1}`); // teamId = index + 1
-    } catch (err) {
-      console.error(err);
-      alert("팀 정보를 불러오는 중 오류가 발생했습니다.");
+    if (teamIndex === -1) {
+      alert("속한 팀을 찾을 수 없습니다.");
+      return;
     }
-  };
 
+    router.push(`/team/${teamIndex + 1}`);
+  };
+  
   return (
     <div
       className="w-full max-w-[375px] flex flex-col justify-center items-center gap-4"
@@ -97,15 +77,15 @@ export default function MyPage() {
           ${
             user.teamBuilt
               ? 'text-white bg-[#FF6F00] hover:brightness-95'
-              : 'bg-gray-300 text-gray-500'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
           }`}
       >
         우리 조 보러 가기
       </button>
 
       {!user.teamBuilt && (
-        <p className="text-gray-500">
-          아직 팀 배정이 완료되지 않았습니다. 조금만 기다려주세요!
+        <p className="text-m text-gray-500">
+          아직 관리자가 팀 배정을 완료하지 않았습니다.
         </p>
       )}
     </div>
