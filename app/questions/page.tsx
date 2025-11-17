@@ -110,7 +110,7 @@ export default function QuestionsPage() {
         <div className="relative flex justify-center">
           <img src="/images/laptop.png" className="w-[320px]" />
           <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-            <h2 className="text-xl text-black">{currentQuestion.content}</h2>
+            <h2 className="text-[24px] text-black">{currentQuestion.content}</h2>
           </div>
         </div>
 

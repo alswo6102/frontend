@@ -5,16 +5,23 @@
 }
 
 @font-face {
-  font-family: "MeetMe";
-  src: url("/fonts/meetme.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'MitmiFont';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_1@1.0/Ownglyph_meetme-Rg.woff2') format('woff2');
+    font-weight: normal;
+    font-display: swap;
 }
 
 @font-face {
   font-family: "Pretendard";
   src: url("/fonts/PretendardVariable.ttf") format("truetype");
 }
+
+@font-face {
+  font-family: "OkDanDan";
+  src: url("/fonts/OkDanDan.ttf") format("truetype");
+}
+
+@font
 
 @layer base {
   html, body, #__next {
@@ -26,13 +33,14 @@
   }
 }
 
-/* 전체 폰트 => MeetMe */
+/* 기본 폰트 */
 html, body, * {
-  @apply font-[MeetMe]
+  @apply font-[MitmiFont]
 }
 
 button {
   @apply cursor-pointer;
+  @apply font-[OkDanDan];
 }
 
 input, textarea, select, option {
