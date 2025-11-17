@@ -39,7 +39,6 @@ html, body, * {
 }
 
 button {
-  @apply cursor-pointer;
   @apply font-[OkDanDan];
 }
 

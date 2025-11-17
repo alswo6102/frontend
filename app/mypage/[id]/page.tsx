@@ -90,8 +90,8 @@ export default function MyPage() {
       </button>
 
       {!user.teamBuilt && (
-        <p className="text-sm text-gray-500 mt-2">
-          아직 관리자에서 팀 배정이 완료되지 않았습니다.
+        <p className="text-gray-500">
+          아직 팀 배정이 완료되지 않았습니다. 조금만 기다려주세요!
         </p>
       )}
     </div>
