@@ -165,7 +165,7 @@ export default function AdultAdminPage() {
       />
 
       {/* PAGE */}
-      <div className="w-full max-w-[375px] md:max-w-[1000px] flex flex-col items-center mt-3 px-6">
+      <div className="w-full max-w-[375px] md:max-w-[1000px] flex flex-col items-center mt-3 px-6 gap-6">
         
         {/* INPUT UI: 총원/팀개수 + 빌딩 버튼 */}
         <TeamBuildControls
@@ -179,7 +179,7 @@ export default function AdultAdminPage() {
         />
 
         {/* 응답 정보 */}
-        <p className="text-m bg-orange-100 text-orange-700 px-3 py-1 rounded-md text-center w-full md:w-[600px] mb-4 mt-3">
+        <p className="text-m bg-orange-100 text-orange-700 px-3 py-1 rounded-md text-center w-full md:w-[600px]">
           응답: {answerCount} / {totalMembers}
         </p>
 

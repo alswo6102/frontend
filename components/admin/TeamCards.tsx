@@ -23,7 +23,7 @@ export default function TeamCards({ teams, activeTeam, TEAM_COLORS }: TeamCardsP
     return (
       <div
         key={tIdx}
-        className="p-4 rounded-xl bg-white"
+        className="w-full p-4 rounded-xl bg-white"
         style={{ borderLeft: `8px solid ${color}` }}
       >
         <h2 className="text-xl mb-3" style={{ color, fontFamily: 'OkDanDan' }}>

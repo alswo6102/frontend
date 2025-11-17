@@ -1,5 +1,3 @@
-// components/admin/AnswerCard.tsx
-
 interface AnswerCardProps {
   name: string;
   answers: string[] | Record<string, string> | undefined | null;  
