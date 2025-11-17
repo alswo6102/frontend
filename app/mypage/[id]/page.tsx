@@ -2,24 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { getUserInfo } from '@/lib/api';
-
-interface UserResult {
-  id: number;
-  name: string;
-  role: string;
-  answer: string;
-  image: string;
-  description: string;
-  teamBuilt: boolean;
-  teamId?: number;          // 팀 ID 추가
-}
+import { getTeamInfo, getUserInfo } from '@/lib/api';
+import { MyPageUser } from '@/lib/types'; 
+import Loading from '@/components/common/Loading';
 
 export default function MyPage() {
   const params = useParams();
   const router = useRouter();
   const { id } = params;
-  const [user, setUser] = useState<UserResult | null>(null);
+  const [user, setUser] = useState<MyPageUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,7 +19,7 @@ export default function MyPage() {
     const fetchUser = async () => {
       try {
         setLoading(true);
-        const data = await getUserInfo(Number(id));
+        const data = await getUserInfo(Number(id)); 
         setUser(data);
       } catch (err) {
         console.error(err);
@@ -43,24 +34,27 @@ export default function MyPage() {
   }, [id, router]);
 
   if (loading)
-    return (
-      <div className="flex justify-center items-center h-screen text-lg">
-        로딩 중...
-      </div>
-    );
+    return <Loading />
 
   if (!user) return null;
 
   // 클릭 핸들러
-  const handleGoTeam = () => {
-    if (!user.teamBuilt) return; // 팀 배정 전 클릭 불가
-    if (!user.teamId) {
-      alert('아직 팀이 배정되지 않았습니다.');
+  const handleGoTeam = async () => {
+    if (!user.teamBuilt) return;
+
+    const teamData = await getTeamInfo();
+    const teamIndex = teamData.teams.findIndex((team: any) =>
+      team.members.some((m: any) => m.name === user.name)
+    );
+
+    if (teamIndex === -1) {
+      alert("속한 팀을 찾을 수 없습니다.");
       return;
     }
-    router.push(`/team/${user.teamId}`);
-  };
 
+    router.push(`/team/${teamIndex + 1}`);
+  };
+  
   return (
     <div
       className="w-full max-w-[375px] flex flex-col justify-center items-center gap-4"
@@ -68,7 +62,7 @@ export default function MyPage() {
     >
       <h2 className="text-3xl">당신은... {user.answer}!</h2>
 
-      <div className="flex flex-col items-center gap-4 w-[240px] relative">
+      <div className="flex flex-col items-center gap-4 w-60 relative">
         <img src={user.image} alt={user.answer} />
         <p className="text-[22px] text-center text-orange-500">
           {user.description}
@@ -90,8 +84,8 @@ export default function MyPage() {
       </button>
 
       {!user.teamBuilt && (
-        <p className="text-sm text-gray-500 mt-2">
-          아직 관리자에서 팀 배정이 완료되지 않았습니다.
+        <p className="text-m text-gray-500">
+          아직 관리자가 팀 배정을 완료하지 않았습니다.
         </p>
       )}
     </div>

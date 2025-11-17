@@ -1,7 +1,5 @@
 'use client';
 
-import React from "react";
-
 interface CounterInputProps {
   label: string;
   value: number;
@@ -30,7 +28,7 @@ export default function CounterInput({
 
   return (
     <div className="flex flex-col gap-1">
-      <span className="text-sm text-gray-600">{label}</span>
+      <span>{label}</span>
 
       <div
         className={`flex items-center justify-between w-[200px] h-[35px] 
@@ -42,7 +40,7 @@ export default function CounterInput({
           onClick={decrease}
           disabled={disabled}
           className={`w-6 h-6 flex items-center justify-center rounded-full 
-                      ${disabled ? "bg-gray-200 cursor-not-allowed" : "bg-gray-100 hover:bg-gray-200"}`}
+                      ${disabled ? "bg-gray-200" : "bg-gray-100 hover:bg-gray-200"}`}
         >
           -
         </button>
@@ -57,7 +55,7 @@ export default function CounterInput({
           onClick={increase}
           disabled={disabled}
           className={`w-6 h-6 flex items-center justify-center rounded-full 
-                      ${disabled ? "bg-gray-200 cursor-not-allowed" : "bg-gray-100 hover:bg-gray-200"}`}
+                      ${disabled ? "bg-gray-200" : "bg-gray-100 hover:bg-gray-200"}`}
         >
           +
         </button>

@@ -21,3 +21,14 @@ export interface Question {
     type?: 'metric' | 'text' | 'choice' | 'mbti';
     choices?: string[];
 }
+
+// MyPage 사용자 정보
+export interface MyPageUser {
+  id: number;
+  name: string;
+  role: 'BABY' | 'ADULT';
+  answer: string;
+  image: string;
+  description: string;
+  teamBuilt: boolean;
+}
